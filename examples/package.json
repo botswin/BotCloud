@@ -1,0 +1,18 @@
+{
+  "name": "botcloud-examples",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Reference scripts for connecting to BotCloud",
+  "license": "UNLICENSED",
+  "scripts": {
+    "puppeteer": "node puppeteer/node/cloud-connect.mjs",
+    "playwright": "node playwright/node/cloud-connect.mjs",
+    "cdp": "node cdp/node/cdp-connect.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "playwright": "^1.56.1",
+    "puppeteer-core": "^24.30.0",
+    "ws": "^8.18.3"
+  }
+}
