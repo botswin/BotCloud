@@ -8,26 +8,18 @@
 
 ---
 
-BotCloud keeps a fleet of browsers online so you do not have to. Point your existing Puppeteer, Playwright, Selenium, or PuppeteerSharp scripts at our WebSocket endpoint and they wake up in the cloud with the same automation APIs you already know. This repo acts as the field manual: it walks through connection requirements, hands you drop-in samples in several languages, and collects the operational notes we share with paying customers.
+BotCloud keeps a fleet of browsers online so you do not have to. Point your existing Puppeteer, Playwright, Selenium, or PuppeteerSharp scripts at our WebSocket endpoint and they wake up in the cloud with the automation APIs you already know. This repo acts as the field manual: it walks through connection requirements, hands you drop-in samples in several languages, and collects the operational notes we normally bundle with enterprise rollouts.
+
+**Why teams pick BotCloud:**
+
+- No more desktop babysitting—cloud browsers stay patched and geo-distributed out of the box.
+- Existing scripts keep working (Puppeteer, Playwright, Selenium, CDP) with minimal tweaks.
+- Mandatory proxy + region controls plus usage-based billing make compliance reviews easy.
+
+Skim the highlights, then dive into the sections that match your workflow.
 
 > 💡 **Pricing heads-up:** Billing is usage-based. Unit costs are still being finalized, so reach out to the business contact on your contract for the latest numbers.
 > ⚖️ Review the [Legal Disclaimer](DISCLAIMER.md) and [Responsible Use Guidelines](RESPONSIBLE_USE.md) before onboarding any workload.
-
-### Table of Contents
-
-1. [Quick Start](#quick-start)
-2. [Cloud Service Highlights](#cloud-service-highlights)
-3. [Token Provisioning](#token-provisioning)
-4. [Connection Parameters](#connection-parameters)
-5. [Network & Security](#network--security)
-6. [Integration Examples](#integration-examples)
-7. [Quota, Monitoring & Billing](#quota-monitoring--billing)
-8. [Troubleshooting](#troubleshooting)
-9. [Best Practices](#best-practices)
-10. [Changelog](#changelog)
-11. [Resources](#resources)
-
----
 
 ## Quick Start
 
@@ -141,19 +133,11 @@ Wrap your automation in `try/finally` so `browser.close()` always fires, even wh
 
 ## Best Practices
 
-A few habits pay off quickly:
-
-1. Validate token and proxy values before dialing the Gateway.
-2. Add exponential-backoff reconnects for workflows that run longer than a minute or two.
-3. Keep tokens in a secret store and include secret-scanning in your CI pipelines.
-4. Ship quota metrics into your existing observability stack and alert before the balance hits zero.
-5. Wrap endpoint construction in a helper function so every script in every language stays in sync.
-
----
-
-## Changelog
-
-See [`CHANGELOG.md`](CHANGELOG.md) for dated updates. Latest entry: **2025-11-18** (legal docs, CDP sample, doc refresh).
+- Validate token and proxy values before dialing the Gateway.
+- Add exponential-backoff reconnects for workflows that run longer than a minute or two.
+- Keep tokens in a secret store and include secret-scanning in CI pipelines.
+- Ship quota metrics into your observability stack and alert before the balance hits zero.
+- Wrap endpoint construction in a helper so each script stays consistent.
 
 ---
 
@@ -161,6 +145,7 @@ See [`CHANGELOG.md`](CHANGELOG.md) for dated updates. Latest entry: **2025-11-18
 
 - Legal Disclaimer: [`DISCLAIMER.md`](DISCLAIMER.md)
 - Responsible Use Guidelines: [`RESPONSIBLE_USE.md`](RESPONSIBLE_USE.md)
+- Changelog: [`CHANGELOG.md`](CHANGELOG.md)
 - Operations Notes: [`docs/operations.md`](docs/operations.md)
 - Sample Scripts: [`examples/`](examples/)
 - Detailed User Guide (internal, request from administrators)
