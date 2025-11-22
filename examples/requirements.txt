@@ -1,2 +1,13 @@
-playwright==1.56.0
-selenium==4.36.0
+# BotCloud Python Examples Dependencies
+# Install with: pip install -r requirements.txt
+
+# Automation frameworks
+playwright>=1.56.0
+selenium>=4.36.0
+pyppeteer>=2.0.0
+
+# Low-level dependencies
+websockets>=13.0
+
+# Note: After installing playwright, run:
+# playwright install chromium
