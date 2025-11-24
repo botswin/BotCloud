@@ -21,6 +21,8 @@ Skim the highlights, then dive into the sections that match your workflow.
 > 💡 **Pricing heads-up:** Billing is usage-based. Unit costs are still being finalized, so reach out to the business contact on your contract for the latest numbers.
 > ⚖️ Review the [Legal Disclaimer](DISCLAIMER.md) and [Responsible Use Guidelines](RESPONSIBLE_USE.md) before onboarding any workload.
 
+**🌐 Learn more:** Visit our official website at **[bots.win](https://bots.win)** for detailed documentation, pricing, and support.
+
 ## Quick Start
 
 To get a session going you only need a token, a proxy, and a short snippet of code.
@@ -255,6 +257,7 @@ Wrap your automation in `try/finally` so `browser.close()` always fires, even wh
 
 ## Resources
 
+- **Official Website**: [https://bots.win](https://bots.win)
 - Legal Disclaimer: [`DISCLAIMER.md`](DISCLAIMER.md)
 - Responsible Use Guidelines: [`RESPONSIBLE_USE.md`](RESPONSIBLE_USE.md)
 - Changelog: [`CHANGELOG.md`](CHANGELOG.md)
