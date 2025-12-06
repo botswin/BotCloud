@@ -80,6 +80,27 @@ cd examples/playwright/csharp && dotnet run
 
 ### Example Details
 
+#### User Data Management
+
+User Data allows you to persist browser state (cookies, localStorage, login sessions) across multiple browser sessions.
+
+| Language | Path | Description |
+|----------|------|-------------|
+| **Node.js** | [`user-data/node/user-data.mjs`](user-data/node/user-data.mjs) | Complete User Data lifecycle: create, use, verify persistence, delete |
+| **Python** | [`user-data/python/user_data.py`](user-data/python/user_data.py) | User Data management with Playwright and async/await |
+
+**When to use User Data:**
+- You need to preserve login states across sessions
+- You want to avoid repeated authentication flows
+- You're running multi-step workflows that span multiple sessions
+- You need persistent cookies or localStorage data
+
+**Key features:**
+- Each User Data has a unique ID (format: `udd_xxxxxxxxxxxx`)
+- Data persists until explicitly deleted via API
+- Cannot delete User Data while it's locked (in use by active session)
+- Quota limits apply (check `/api/user-data` for current limits)
+
 #### Puppeteer
 
 Puppeteer is a high-level Node.js library for controlling Chrome/Chromium via the DevTools Protocol.
@@ -131,6 +152,9 @@ Selenium is the classic WebDriver standard for browser automation.
 ### Node.js Examples
 
 ```bash
+# User Data Management
+node examples/user-data/node/user-data.mjs
+
 # Puppeteer
 node examples/puppeteer/node/cloud-connect.mjs
 
@@ -160,6 +184,9 @@ node dist/cloud-connect.js
 ### Python Examples
 
 ```bash
+# User Data Management
+python examples/user-data/python/user_data.py
+
 # Puppeteer (pyppeteer)
 python examples/puppeteer/python/cloud_connect.py
 

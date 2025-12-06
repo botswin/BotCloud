@@ -77,6 +77,7 @@ Tokens are provided by your service provider. They might look like `user-token-a
 | `token`          | ✅        | `user-token-abc123`                         | Identifies you for auth and billing |
 | `--proxy-server` | ✅        | `username:password@proxy.example.com:4600`  | Must include credentials and host:port |
 | `device_type`    | ❌        | `mac` / `win` / `android`                   | Optional fingerprint override (defaults to `mac`) |
+| `user_data_id`   | ❌        | `udd_xxxxxxxxxxxx`                          | Optional User Data ID for persistent browser data (cookies, localStorage, login states) |
 
 Keep a few basics in mind: include every parameter in the WebSocket query (`wss://cloud.bots.win?${query}`), URL-encode usernames or passwords that contain reserved characters such as `@` or `:`, and verify token plus proxy values before dialing so you do not burn quota on `400` or `401` responses.
 
@@ -189,6 +190,113 @@ curl -H "Authorization: Bearer your-token" https://cloud.bots.win/api/history
 - `insufficient_balance` - Quota exhausted during session
 - `socket_timeout` - No data transferred for 5 minutes
 - `tcp_error` - Network error
+
+### POST /api/user-data
+
+Create a new User Data for persistent browser storage (cookies, localStorage, login states). Each User Data directory persists across sessions until explicitly deleted.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer your-token" \
+  https://cloud.bots.win/api/user-data
+```
+
+**Response:**
+```json
+{
+  "id": "udd_abc123def456xyz0",
+  "createdAt": "2025-01-15T10:30:00Z"
+}
+```
+
+**Error Codes:**
+- `403 NO_PERMISSION` - User does not have permission to create User Data
+- `429 QUOTA_EXCEEDED` - User Data quota limit reached
+
+### GET /api/user-data
+
+List all User Data entries owned by the authenticated user, including quota information.
+
+```bash
+curl -H "Authorization: Bearer your-token" \
+  https://cloud.bots.win/api/user-data
+```
+
+**Response:**
+```json
+{
+  "items": [
+    {
+      "id": "udd_abc123def456xyz0",
+      "createdAt": "2025-01-15T10:30:00Z",
+      "lastUsedAt": "2025-01-16T08:00:00Z",
+      "isLocked": false
+    }
+  ],
+  "total": 1,
+  "quota": {
+    "used": 1,
+    "max": 5,
+    "canCreate": true
+  }
+}
+```
+
+**Field Descriptions:**
+- `isLocked` - True when User Data is currently in use by an active session
+- `quota.used` - Number of User Data entries created
+- `quota.max` - Maximum allowed User Data entries
+- `quota.canCreate` - Whether user can create more User Data
+
+### DELETE /api/user-data/:id
+
+Delete a User Data entry and its associated browser data. User Data cannot be deleted while in use.
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer your-token" \
+  https://cloud.bots.win/api/user-data/udd_abc123def456xyz0
+```
+
+**Response:**
+```json
+{
+  "success": true
+}
+```
+
+**Error Codes:**
+- `404` - User Data not found
+- `403` - Access denied (not owned by user)
+- `409` - User Data is currently in use (locked)
+
+### Using User Data
+
+To use persistent browser data, create a User Data ID first, then pass it as a connection parameter:
+
+```javascript
+// 1. Create User Data
+const response = await fetch('https://cloud.bots.win/api/user-data', {
+  method: 'POST',
+  headers: { 'Authorization': `Bearer ${token}` }
+});
+const { id: userDataId } = await response.json();
+
+// 2. Connect with User Data
+const params = new URLSearchParams({
+  token: 'your-token',
+  '--proxy-server': 'username:password@proxy.example.com:4600',
+  user_data_id: userDataId  // Browser will use persistent data directory
+});
+
+const browser = await puppeteer.connect({
+  browserWSEndpoint: `wss://cloud.bots.win?${params.toString()}`
+});
+
+// Cookies, localStorage, and login states persist across sessions
+```
+
+See [`examples/user-data/`](examples/user-data/) for complete working examples.
 
 ### Billing
 
