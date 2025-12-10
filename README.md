@@ -59,6 +59,7 @@ await browser.close();
 - Proxy-aware routing enforces explicit `--proxy-server` declarations for predictable geo testing and compliance tracking.
 - Usage-based billing lets you burst during campaigns and scale down later without pre-purchasing seats.
 - Built-in quotas, detailed logs, and abuse workflows keep the shared infrastructure safe for every tenant.
+- LiveURL interactive sessions let scripts pause for human input—perfect for CAPTCHAs, 2FA, or manual login steps.
 
 ---
 
@@ -110,8 +111,128 @@ For a complete list of all available examples and instructions, see [`examples/R
 | **Playwright** | C#       | [`examples/playwright/csharp/PlaywrightConnect.cs`](examples/playwright/csharp/PlaywrightConnect.cs) | Playwright for .NET |
 | **Selenium** | Python   | [`examples/selenium/python/quickstart.py`](examples/selenium/python/quickstart.py) | Selenium with CDP |
 | **Selenium** | C#       | [`examples/selenium/csharp/SeleniumBidi.cs`](examples/selenium/csharp/SeleniumBidi.cs) | Selenium BiDi |
+| **LiveURL** | Node.js (Puppeteer) | [`examples/liveurl/node/puppeteer-liveurl.mjs`](examples/liveurl/node/puppeteer-liveurl.mjs) | Interactive session with human input (Puppeteer) |
+| **LiveURL** | Node.js (Playwright) | [`examples/liveurl/node/playwright-liveurl.mjs`](examples/liveurl/node/playwright-liveurl.mjs) | Interactive session with human input (Playwright) |
 
 Need another SDK? Tell us via issues or your usual internal contact and we will add new samples once the framework is validated.
+
+---
+
+## LiveURL - Interactive Browser Control
+
+LiveURL enables real-time human intervention during automated workflows. When your script encounters a CAPTCHA, requires two-factor authentication, or needs manual input, it can request a LiveURL that displays the live browser session in any web browser. The user sees real-time screen updates, can interact with the page (click, type, scroll), and signals completion by clicking "Done"—at which point your automation continues.
+
+### When to Use LiveURL
+
+- **CAPTCHA Handling** - Let humans solve CAPTCHAs while your script waits
+- **Two-Factor Authentication** - Manually enter 2FA codes or approve push notifications
+- **Manual Login** - Handle complex login flows that resist automation
+- **Debugging** - Visually inspect automation state and interact with the page
+- **Hybrid Workflows** - Combine automated steps with human decision points
+
+### How It Works
+
+1. **Create a CDP Session** during your automation workflow
+2. **Listen for completion** by registering a `liveComplete` event handler
+3. **Request a LiveURL** with optional timeout (defaults to 5 minutes)
+4. **Share the URL** with a user (log it, send via notification, display in UI)
+5. **User interacts** by opening the URL in any browser—they see live screen updates and can click/type/scroll
+6. **User signals done** by clicking the "Done" button or waiting for timeout
+7. **Script continues** after the `liveComplete` event fires
+
+### CDP Commands
+
+BotCloud extends the Chrome DevTools Protocol with these commands:
+
+**`liveURL`** - Request an interactive viewing session
+
+```javascript
+const { liveURL } = await cdpSession.send('liveURL', {
+  timeout: 120000  // Optional: milliseconds before auto-timeout (default: 300000)
+});
+// Returns: { liveURL: "https://cloud.bots.win/live/abc123def456" }
+```
+
+**`liveComplete`** - Event fired when user clicks "Done" or timeout expires
+
+```javascript
+cdpSession.on('liveComplete', () => {
+  console.log('User finished interaction');
+  // Continue automation...
+});
+```
+
+### Code Examples
+
+#### Puppeteer
+
+```javascript
+import puppeteer from "puppeteer-core";
+
+const browser = await puppeteer.connect({ browserWSEndpoint: wsUrl });
+const page = await browser.newPage();
+await page.goto("https://example.com/login");
+
+// Create CDP session
+const cdp = await page.createCDPSession();
+
+// Listen for completion
+cdp.on("liveComplete", () => {
+  console.log("User completed interaction");
+});
+
+// Request LiveURL (2 minute timeout)
+const { liveURL } = await cdp.send("liveURL", { timeout: 120000 });
+console.log(`Open this URL to interact: ${liveURL}`);
+
+// Wait for user to complete
+await new Promise(resolve => cdp.on("liveComplete", resolve));
+
+// Continue automation after user interaction
+await page.goto("https://example.com/dashboard");
+await browser.close();
+```
+
+#### Playwright
+
+```javascript
+import { chromium } from "playwright";
+
+const browser = await chromium.connectOverCDP(wsUrl);
+const context = browser.contexts()[0];
+const page = await context.newPage();
+await page.goto("https://example.com/login");
+
+// Create CDP session
+const cdp = await context.newCDPSession(page);
+
+// Listen for completion
+cdp.on("liveComplete", () => {
+  console.log("User completed interaction");
+});
+
+// Request LiveURL (2 minute timeout)
+const { liveURL } = await cdp.send("liveURL", { timeout: 120000 });
+console.log(`Open this URL to interact: ${liveURL}`);
+
+// Wait for user to complete
+await new Promise(resolve => cdp.on("liveComplete", resolve));
+
+// Continue automation after user interaction
+await page.goto("https://example.com/dashboard");
+await browser.close();
+```
+
+### Important Notes
+
+- **One LiveURL per session** - Only one active LiveURL allowed per browser session
+- **Security** - LiveURL tokens are single-use and expire after timeout or completion
+- **Screen updates** - Live view shows real-time browser screen (approximately 5-10 FPS)
+- **Full interaction** - Users can click, type, scroll, and navigate just like a local browser
+- **Quota consumption** - LiveURL time counts toward your usage quota
+- **Timeout handling** - `liveComplete` fires on both user completion and timeout expiration
+
+For complete working examples, see [`examples/liveurl/`](examples/liveurl/).
 
 ---
 

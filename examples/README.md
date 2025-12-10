@@ -144,6 +144,29 @@ Selenium is the classic WebDriver standard for browser automation.
 - You need WebDriver compatibility
 - You're integrating with Selenium Grid
 
+#### LiveURL - Interactive Browser Control
+
+LiveURL enables real-time human intervention during automated workflows. When your script needs manual input, it requests a LiveURL that displays the live browser session in any web browser with real-time screen updates and full interaction capabilities.
+
+| Language | Path | Description |
+|----------|------|-------------|
+| **Node.js (Puppeteer)** | [`liveurl/node/puppeteer-liveurl.mjs`](liveurl/node/puppeteer-liveurl.mjs) | Interactive session with LiveURL using Puppeteer |
+| **Node.js (Playwright)** | [`liveurl/node/playwright-liveurl.mjs`](liveurl/node/playwright-liveurl.mjs) | Interactive session with LiveURL using Playwright |
+
+**When to use LiveURL:**
+- You need to solve CAPTCHAs during automation
+- Manual two-factor authentication is required
+- Complex login flows resist automation
+- Debugging automation scripts visually
+- Hybrid workflows combining automation with human decision points
+
+**Key features:**
+- Real-time screen updates (approximately 5-10 FPS)
+- Full interaction: click, type, scroll, navigate
+- Configurable timeout (defaults to 5 minutes)
+- `liveComplete` event signals when user clicks "Done" or timeout expires
+- Works with both Puppeteer and Playwright via CDP sessions
+- LiveURL tokens are single-use and expire after completion
 
 ---
 
@@ -156,16 +179,14 @@ Selenium is the classic WebDriver standard for browser automation.
 node examples/user-data/node/user-data.mjs
 
 # Puppeteer
-node examples/puppeteer/node/cloud-connect.mjs
+node examples/puppeteer/node/quickstart.mjs
 
 # Playwright
-node examples/playwright/node/cloud-connect.mjs
+node examples/playwright/node/quickstart.mjs
 
-# Selenium
-node examples/selenium/node/cloud-connect.mjs
-
-# CDP
-node examples/cdp/node/cdp-connect.mjs
+# LiveURL - Interactive Sessions
+node examples/liveurl/node/puppeteer-liveurl.mjs   # Puppeteer version
+node examples/liveurl/node/playwright-liveurl.mjs  # Playwright version
 ```
 
 ### TypeScript Examples
