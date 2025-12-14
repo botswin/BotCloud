@@ -1,6 +1,6 @@
 # BotCloud Code Examples
 
-This directory contains ready-to-run code examples for connecting to BotCloud using various automation frameworks and programming languages.
+This directory contains ready-to-run code examples for connecting to BotCloud using various automation frameworks and programming languages for authorized privacy and fingerprint research.
 
 ## Quick Start
 
@@ -154,7 +154,7 @@ LiveURL enables real-time human intervention during automated workflows. When yo
 | **Node.js (Playwright)** | [`liveurl/node/playwright-liveurl.mjs`](liveurl/node/playwright-liveurl.mjs) | Interactive session with LiveURL using Playwright |
 
 **When to use LiveURL:**
-- You need to solve CAPTCHAs during automation
+- You need to solve CAPTCHAs during privacy automation
 - Manual two-factor authentication is required
 - Complex login flows resist automation
 - Debugging automation scripts visually

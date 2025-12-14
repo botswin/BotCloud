@@ -1,6 +1,6 @@
 <h1 align="center">☁️ BotCloud</h1>
 
-<h4 align="center">Hosted Browser Automation Gateway for teams who would rather ship than babysit desktops</h4>
+<h4 align="center">Hosted Privacy Browser Gateway for teams validating fingerprint defenses without babysitting desktops</h4>
 
 <p align="center">
   Usage-based billing • Works with your favorite automation stacks • Proxy-aware by design
@@ -8,13 +8,13 @@
 
 ---
 
-BotCloud keeps a fleet of browsers online so you do not have to. Point your existing Puppeteer, Playwright, Selenium, or PuppeteerSharp scripts at our WebSocket endpoint and they wake up in the cloud with the automation APIs you already know. This repo acts as the field manual: it walks through connection requirements, hands you drop-in samples in several languages, and collects the operational notes we normally bundle with enterprise rollouts.
+BotCloud keeps a fleet of browsers online so you do not have to. Point your existing Puppeteer, Playwright, Selenium, or PuppeteerSharp scripts at our WebSocket endpoint and the sessions wake up in the cloud with the automation APIs you already know. This repo acts as the field manual: it walks through connection requirements, hands you drop-in samples in several languages, and collects the operational notes we bundle with privacy-focused deployments.
 
-**Why teams pick BotCloud:**
+**Why privacy teams pick BotCloud:**
 
-- No more desktop babysitting—cloud browsers stay patched and geo-distributed out of the box.
-- Existing scripts keep working (Puppeteer, Playwright, Selenium, CDP) with minimal tweaks.
-- Mandatory proxy + region controls plus usage-based billing make compliance reviews easy.
+- No more desktop babysitting because cloud browsers stay patched and geo-distributed out of the box.
+- Existing scripts keep working (Puppeteer, Playwright, Selenium, CDP) with minimal tweaks for privacy testing.
+- Mandatory proxy plus region controls with usage-based billing make compliance reviews easy.
 
 Skim the highlights, then dive into the sections that match your workflow.
 
@@ -59,13 +59,13 @@ await browser.close();
 - Proxy-aware routing enforces explicit `--proxy-server` declarations for predictable geo testing and compliance tracking.
 - Usage-based billing lets you burst during campaigns and scale down later without pre-purchasing seats.
 - Built-in quotas, detailed logs, and abuse workflows keep the shared infrastructure safe for every tenant.
-- LiveURL interactive sessions let scripts pause for human input—perfect for CAPTCHAs, 2FA, or manual login steps.
+- LiveURL interactive sessions let scripts pause for human input, which is perfect for CAPTCHAs, 2FA, or manual login steps.
 
 ---
 
 ## Token Provisioning
 
-Tokens are provided by your service provider. They might look like `user-token-abc123` or a long 64-character hex string. Create separate tokens for dev, staging, and production so you can audit usage later. Keep them in a vault or CI secret manager—never in git. If one ever leaks, contact your service provider to rotate it before running anything else.
+Tokens are provided by your service provider. They might look like `user-token-abc123` or a long 64-character hex string. Create separate tokens for dev, staging, and production so you can audit usage later. Keep them in a vault or CI secret manager and never in git. If one ever leaks, contact your service provider to rotate it before running anything else.
 
 > 🔐 Keep a simple spreadsheet or secrets inventory that lists where each token is used and when it expires. Future-you will be grateful.
 
@@ -120,7 +120,7 @@ Need another SDK? Tell us via issues or your usual internal contact and we will 
 
 ## LiveURL - Interactive Browser Control
 
-LiveURL enables real-time human intervention during automated workflows. When your script encounters a CAPTCHA, requires two-factor authentication, or needs manual input, it can request a LiveURL that displays the live browser session in any web browser. The user sees real-time screen updates, can interact with the page (click, type, scroll), and signals completion by clicking "Done"—at which point your automation continues.
+LiveURL enables real-time human intervention during automated workflows. When your script encounters a CAPTCHA, requires two-factor authentication, or needs manual input, it can request a LiveURL that displays the live browser session in any web browser. The user sees real-time screen updates, can interact with the page (click, type, scroll), and signals completion by clicking "Done," at which point your automation continues.
 
 ### When to Use LiveURL
 
@@ -136,7 +136,7 @@ LiveURL enables real-time human intervention during automated workflows. When yo
 2. **Listen for completion** by registering a `liveComplete` event handler
 3. **Request a LiveURL** with optional timeout (defaults to 5 minutes)
 4. **Share the URL** with a user (log it, send via notification, display in UI)
-5. **User interacts** by opening the URL in any browser—they see live screen updates and can click/type/scroll
+5. **User interacts** by opening the URL in any browser so they see live screen updates and can click/type/scroll
 6. **User signals done** by clicking the "Done" button or waiting for timeout
 7. **Script continues** after the `liveComplete` event fires
 
@@ -421,7 +421,7 @@ See [`examples/user-data/`](examples/user-data/) for complete working examples.
 
 ### Billing
 
-BotCloud uses usage-based billing: **1 minute of browser session time = 1 quota unit**. Pricing is still being finalized—contact your service provider for the latest unit costs.
+BotCloud uses usage-based billing: **1 minute of browser session time = 1 quota unit**. Pricing is still being finalized, so contact your service provider for the latest unit costs.
 
 ---
 
