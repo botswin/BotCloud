@@ -39,7 +39,7 @@ If you cannot confirm that your use case is permitted, stop and consult legal co
 
 - BotCloud may experience downtime, API changes, or feature adjustments without prior notice.
 - Compatibility with specific targets is not guaranteed; external websites may change detection logic at any time.
-- The service does not guarantee anonymity or undetectability. Customers are responsible for any legal or regulatory fallout stemming from their automation work.
+- The service does not guarantee anonymity or privacy compliance. Customers are responsible for any legal or regulatory fallout stemming from their automation work.
 
 ## Liability & Indemnification
 

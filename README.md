@@ -1,6 +1,6 @@
 <h1 align="center">☁️ BotCloud</h1>
 
-<h4 align="center">Enterprise Cloud Browser with Undetectable Fingerprint Protection</h4>
+<h4 align="center">Hosted Privacy Browser Gateway for teams validating fingerprint defenses</h4>
 
 <p align="center">
   🛡️ <strong>Fingerprint Defense</strong> - Validated against 31+ detection systems<br>
@@ -10,12 +10,13 @@
 
 ---
 
-Connect to cloud Chrome with your familiar Puppeteer or Playwright code — no deployment, no maintenance, fingerprint-level isolation. BotCloud passes fingerprint checks that defeat other solutions.
+Connect to cloud Chrome with your familiar Puppeteer or Playwright code — no deployment, no maintenance, fingerprint-level isolation. BotCloud isolates your real device fingerprint from third-party tracking while helping teams validate their fingerprint defense mechanisms.
 
-**Why automation teams pick BotCloud:**
+**Why privacy teams pick BotCloud:**
 
+- **Protect local device fingerprints** - Cloud-based isolation prevents your device fingerprint from being exposed to third-party tracking and fingerprinting.
 - No more desktop babysitting because cloud browsers stay patched and geo-distributed out of the box.
-- Existing scripts keep working (Puppeteer, Playwright, CDP) with minimal tweaks for undetectable automation.
+- Existing scripts keep working (Puppeteer, Playwright, Selenium, CDP) with minimal tweaks for privacy testing.
 - Mandatory proxy plus region controls with usage-based billing make compliance reviews easy.
 
 > 💡 **Pricing:** Billing is usage-based (1 minute = 1 quota unit). Contact your service provider for the latest rates.
@@ -53,7 +54,7 @@ await browser.close();
 
 ## Why BotCloud
 
-### Unified Fingerprint Defense
+### Fingerprint Defense Validation
 
 | Detection System | Status |
 |------------------|--------|
@@ -84,10 +85,11 @@ const params = new URLSearchParams({
 // Browser automatically uses Asia/Tokyo timezone, ja-JP locale
 ```
 
-### Invisible Automation
+### Privacy-Preserving Automation
 
+- Your local device fingerprint stays isolated in the cloud—third parties never see your real device
 - No `navigator.webdriver` flag
-- No Chrome DevTools Protocol detection vectors
+- No Chrome DevTools Protocol exposure points
 - WebRTC and DNS requests route through your proxy
 - Zero IP leaks from any browser API
 
@@ -102,7 +104,7 @@ const params = new URLSearchParams({
 | `device_type` | `mac` / `win` / `android` | Optional (default: `mac`) |
 | `user_data_id` | `udd_xxxxxxxxxxxx` | Optional |
 
-BotCloud supports 50+ CLI parameters for timezone, locale, noise injection, and more.
+BotCloud supports 50+ CLI parameters for timezone, locale, fingerprint variation, and more.
 
 **📖 [View full CLI parameter reference →](docs/cli-parameters.md)**
 

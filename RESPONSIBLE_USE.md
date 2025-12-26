@@ -1,6 +1,6 @@
 # BotCloud Responsible Use Guidelines
 
-BotCloud is a commercial anti-detection cloud browser service. Every customer shares the same infrastructure, so one team’s workload can affect everyone else. Please keep the following ground rules in mind before you launch new jobs.
+BotCloud is a commercial privacy-focused cloud browser service. Every customer shares the same infrastructure, so one team's workload can affect everyone else. Please keep the following ground rules in mind before you launch new jobs.
 
 ## Before You Start
 
@@ -29,6 +29,6 @@ If you discover that one of your workloads misbehaved, or you receive a complain
 
 ## Publication & Sharing
 
-When presenting automation research or results that rely on BotCloud, clearly document the defensive objective. Redact partner data, avoid disclosing step-by-step bypass instructions, and respect any embargo agreements tied to your contract.
+When presenting automation research or results that rely on BotCloud, clearly document the defensive objective. Redact partner data, avoid disclosing detailed methodology that could be misused to undermine privacy protections, and respect any embargo agreements tied to your contract.
 
 By continuing to use BotCloud you acknowledge (1) the [Legal Disclaimer](DISCLAIMER.md), (2) these Responsible Use rules, and (3) any additional requirements in your commercial agreement. Contact the support team before you run new workloads if you have any doubts about authorization or scope.
