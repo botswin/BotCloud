@@ -9,13 +9,11 @@
     "puppeteer:ts": "ts-node puppeteer/typescript/cloud-connect.ts",
     "playwright": "node playwright/node/cloud-connect.mjs",
     "playwright:ts": "ts-node playwright/typescript/cloud-connect.ts",
-    "selenium": "node selenium/node/cloud-connect.mjs",
     "cdp": "node cdp/node/cdp-connect.mjs"
   },
   "dependencies": {
     "playwright": "^1.56.1",
     "puppeteer-core": "^24.30.0",
-    "selenium-webdriver": "^4.30.0",
     "ws": "^8.18.3"
   },
   "devDependencies": {

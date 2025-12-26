@@ -1,0 +1,7 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+# Ferrum - high-level browser automation library
+# https://github.com/rubycdp/ferrum
+gem 'ferrum', '~> 0.15'

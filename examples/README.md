@@ -1,6 +1,6 @@
 # BotCloud Code Examples
 
-This directory contains ready-to-run code examples for connecting to BotCloud using various automation frameworks and programming languages for authorized privacy and fingerprint research.
+This directory contains ready-to-run code examples for connecting to BotCloud using various automation frameworks and programming languages for authorized automation and fingerprint research.
 
 ## Quick Start
 
@@ -72,11 +72,12 @@ cd examples/playwright/csharp && dotnet run
 
 ### Framework × Language Matrix
 
-| Framework | Node.js | Python | C# |
-|-----------|---------|--------|-----|
-| **Puppeteer** | [✅](puppeteer/node/) | - | [✅](puppeteer/csharp/) |
-| **Playwright** | [✅](playwright/node/) | [✅](playwright/python/) | [✅](playwright/csharp/) |
-| **Selenium** | - | [✅](selenium/python/) | [✅](selenium/csharp/) |
+| Framework | Node.js | Python | C# | Go | Java | Ruby |
+|-----------|---------|--------|-----|-----|------|------|
+| **Puppeteer** | [✅](puppeteer/node/) | - | [✅](puppeteer/csharp/) | - | - | - |
+| **Playwright** | [✅](playwright/node/) | [✅](playwright/python/) | [✅](playwright/csharp/) | - | - | - |
+| **CLI Config** | [✅](cli/node/) | - | - | - | - | - |
+| **CDP (Native)** | - | - | - | [✅](cdp/go/) | [✅](cdp/java/) | [✅](cdp/ruby/) |
 
 ### Example Details
 
@@ -128,37 +129,48 @@ Playwright is a cross-browser automation library supporting Chromium, Firefox, a
 **When to use Playwright:**
 - You need cross-browser support
 - You want built-in waiting and auto-retry features
-- You're migrating from Selenium
+- You prefer a modern, well-maintained API
 
-#### Selenium
+#### CLI Configuration - Custom Fingerprint Settings
 
-Selenium is the classic WebDriver standard for browser automation.
-
-| Language | Path | Description |
-|----------|------|-------------|
-| **Python** | [`selenium/python/quickstart.py`](selenium/python/quickstart.py) | Selenium with CDP connection |
-| **C#** | [`selenium/csharp/SeleniumBidi.cs`](selenium/csharp/SeleniumBidi.cs) | Selenium BiDi example |
-
-**When to use Selenium:**
-- You have existing Selenium test suites
-- You need WebDriver compatibility
-- You're integrating with Selenium Grid
-
-#### LiveURL - Interactive Browser Control
-
-LiveURL enables real-time human intervention during automated workflows. When your script needs manual input, it requests a LiveURL that displays the live browser session in any web browser with real-time screen updates and full interaction capabilities.
+BotCloud supports 50+ CLI parameters for runtime fingerprint configuration. By default, BotCloud auto-detects timezone/locale from your proxy IP. Use CLI parameters when you need specific overrides.
 
 | Language | Path | Description |
 |----------|------|-------------|
-| **Node.js (Puppeteer)** | [`liveurl/node/puppeteer-liveurl.mjs`](liveurl/node/puppeteer-liveurl.mjs) | Interactive session with LiveURL using Puppeteer |
-| **Node.js (Playwright)** | [`liveurl/node/playwright-liveurl.mjs`](liveurl/node/playwright-liveurl.mjs) | Interactive session with LiveURL using Playwright |
+| **Node.js** | [`cli/node/custom-config.mjs`](cli/node/custom-config.mjs) | Custom fingerprint configuration with noise injection |
+
+**When to use CLI Configuration:**
+- You need specific timezone/locale instead of auto-detection
+- You want to enable/disable noise injection for canvas, WebGL, or audio
+- You need to customize browser brand or version
+- You're debugging fingerprint-related issues
+
+**Key parameters:**
+- `--bot-config-timezone`: Override timezone (e.g., `America/New_York`)
+- `--bot-config-locale`: Override browser locale (e.g., `en-US`)
+- `--bot-config-languages`: Override language preferences (e.g., `en,es`)
+- `--bot-config-noise-canvas`: Enable canvas fingerprint noise
+- `--bot-config-noise-webgl-image`: Enable WebGL image noise
+- `--bot-config-noise-audio-context`: Enable audio context noise
+- `--bot-disable-debugger`: Ignore debugger statements
+
+See the [Connection Parameters](../README.md#connection-parameters) section in the main README for the complete list.
+
+#### LiveURL - Visual Debugging & Monitoring
+
+LiveURL provides real-time browser visualization for debugging automated workflows. Request a LiveURL to see exactly what your automation script encounters in a live browser view.
+
+| Language | Path | Description |
+|----------|------|-------------|
+| **Node.js (Puppeteer)** | [`liveurl/node/puppeteer-liveurl.mjs`](liveurl/node/puppeteer-liveurl.mjs) | Visual debugging session with LiveURL using Puppeteer |
+| **Node.js (Playwright)** | [`liveurl/node/playwright-liveurl.mjs`](liveurl/node/playwright-liveurl.mjs) | Visual debugging session with LiveURL using Playwright |
 
 **When to use LiveURL:**
-- You need to solve CAPTCHAs during privacy automation
-- Manual two-factor authentication is required
-- Complex login flows resist automation
-- Debugging automation scripts visually
-- Hybrid workflows combining automation with human decision points
+- **Debug automation issues** - See exactly what your script encounters
+- **Monitor long-running jobs** - Check progress without interrupting execution
+- **Verify page states** - Confirm your script reached the expected state
+- **Team collaboration** - Share a live view with teammates for troubleshooting
+- **Visual logging** - Inspect automation state at key moments
 
 **Key features:**
 - Real-time screen updates (approximately 5-10 FPS)
@@ -167,6 +179,63 @@ LiveURL enables real-time human intervention during automated workflows. When yo
 - `liveComplete` event signals when user clicks "Done" or timeout expires
 - Works with both Puppeteer and Playwright via CDP sessions
 - LiveURL tokens are single-use and expire after completion
+
+#### CDP Multi-Language - Go, Java, Ruby
+
+BotCloud supports direct CDP connections from any language with WebSocket support. These examples demonstrate native CDP connections without framework dependencies.
+
+| Language | Library | Path | Description |
+|----------|---------|------|-------------|
+| **Go** | chromedp | [`cdp/go/chromedp-quickstart.go`](cdp/go/chromedp-quickstart.go) | Recommended Go library, fully compatible |
+| **Go** | rod | [`cdp/go/rod-quickstart.go`](cdp/go/rod-quickstart.go) | Low-level CDP with proper WebSocket key |
+| **Java** | Native WebSocket | [`cdp/java/CdpQuickstart.java`](cdp/java/CdpQuickstart.java) | Java 11+ native WebSocket API |
+| **Ruby** | Ferrum | [`cdp/ruby/ferrum-quickstart.rb`](cdp/ruby/ferrum-quickstart.rb) | High-level Ruby automation library |
+
+**When to use CDP multi-language examples:**
+- You're working in Go, Java, or Ruby and want direct BotCloud access
+- You need fine-grained CDP control without high-level framework overhead
+- You're building custom automation tools in your preferred language
+
+**Library compatibility notes:**
+
+| Language | Library | Compatibility | Notes |
+|----------|---------|---------------|-------|
+| Go | chromedp | ✅ Full | Recommended for Go users |
+| Go | rod (high-level) | ❌ Incompatible | Uses invalid WebSocket key `"nil"` |
+| Go | rod (low-level) | ✅ With workaround | Requires custom `Sec-WebSocket-Key` header |
+| Java | Native WebSocket | ✅ Full | Java 11+ required |
+| Java | cdp4j | ❌ Not suitable | Designed for local Chrome only |
+| Ruby | Ferrum (ws_url) | ✅ Full | Must use `ws_url` parameter |
+| Ruby | Ferrum (url) | ❌ Incompatible | `URI.join()` strips query params |
+
+**rod WebSocket key issue:**
+
+rod's default WebSocket implementation sends `"nil"` as `Sec-WebSocket-Key`, which violates RFC 6455. The workaround is to use rod's low-level CDP API with a proper key:
+
+```go
+func generateWebSocketKey() string {
+    key := make([]byte, 16)
+    rand.Read(key)
+    return base64.StdEncoding.EncodeToString(key)
+}
+
+ws := &cdp.WebSocket{}
+ws.Connect(ctx, wsURL, http.Header{
+    "Sec-WebSocket-Key": {generateWebSocketKey()},
+})
+```
+
+**Ferrum URL parameter issue:**
+
+Ferrum's `url` parameter calls `/json/version` via `URI.join()`, which loses query parameters. Always use `ws_url`:
+
+```ruby
+# Correct
+browser = Ferrum::Browser.new(ws_url: "wss://cloud.bots.win?token=xxx")
+
+# Incorrect - token will be lost
+browser = Ferrum::Browser.new(url: "https://cloud.bots.win?token=xxx")
+```
 
 ---
 
@@ -184,9 +253,12 @@ node examples/puppeteer/node/quickstart.mjs
 # Playwright
 node examples/playwright/node/quickstart.mjs
 
-# LiveURL - Interactive Sessions
+# LiveURL - Visual Debugging
 node examples/liveurl/node/puppeteer-liveurl.mjs   # Puppeteer version
 node examples/liveurl/node/playwright-liveurl.mjs  # Playwright version
+
+# CLI Configuration - Custom Fingerprint Settings
+node examples/cli/node/custom-config.mjs
 ```
 
 ### TypeScript Examples
@@ -214,9 +286,6 @@ python examples/puppeteer/python/cloud_connect.py
 # Playwright
 python examples/playwright/python/cloud_connect.py
 
-# Selenium
-python examples/selenium/python/cloud_connect.py
-
 # CDP
 python examples/cdp/python/cdp_connect.py
 ```
@@ -233,11 +302,49 @@ dotnet run
 cd examples/playwright/csharp
 dotnet restore
 dotnet run
+```
 
-# Selenium
-cd examples/selenium/csharp
-dotnet restore
-dotnet run
+### Go Examples
+
+```bash
+cd examples/cdp/go
+
+# Install dependencies
+go mod tidy
+
+# chromedp (recommended)
+go run chromedp-quickstart.go
+
+# rod (low-level API with WebSocket key workaround)
+go run rod-quickstart.go
+```
+
+### Java Examples
+
+```bash
+cd examples/cdp/java
+
+# Compile (Java 11+ required)
+javac CdpQuickstart.java
+
+# Run
+java CdpQuickstart
+```
+
+### Ruby Examples
+
+```bash
+cd examples/cdp/ruby
+
+# Install dependencies
+bundle install
+
+# Run with Bundler
+bundle exec ruby ferrum-quickstart.rb
+
+# Or install gem globally
+gem install ferrum
+ruby ferrum-quickstart.rb
 ```
 
 ---
@@ -331,12 +438,12 @@ BotCloud allows one connection per token. Options:
 
 **Node.js:**
 ```bash
-npm install dotenv puppeteer-core playwright selenium-webdriver ws
+npm install dotenv puppeteer-core playwright ws
 ```
 
 **Python:**
 ```bash
-pip install python-dotenv pyppeteer playwright selenium websockets
+pip install python-dotenv pyppeteer playwright websockets
 playwright install chromium  # For Playwright
 ```
 
@@ -414,7 +521,7 @@ npm install
 Or selectively:
 
 ```bash
-npm install puppeteer-core playwright selenium-webdriver ws
+npm install puppeteer-core playwright ws
 ```
 
 ### Python
@@ -428,7 +535,7 @@ pip install -r requirements.txt
 Or selectively:
 
 ```bash
-pip install pyppeteer playwright selenium websockets
+pip install pyppeteer playwright websockets
 playwright install chromium  # Required for Playwright
 ```
 
@@ -461,10 +568,10 @@ Found an issue or want to add an example in another language?
 3. Tag with `documentation` or `examples`
 
 We especially welcome examples for:
-- Go (using chromedp or rod)
-- Java (using Playwright for Java or Selenium)
-- Ruby (using Ferrum or Selenium)
-- Additional scenarios (form filling, data scraping, etc.)
+- Additional Go libraries (e.g., other CDP clients)
+- Java Playwright integration
+- Additional Ruby libraries (e.g., Cuprite)
+- Additional scenarios (form filling, data scraping, multi-page workflows)
 
 ---
 

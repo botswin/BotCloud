@@ -2,13 +2,13 @@
 
 ## Intended Audience
 
-BotCloud exists for teams who already have written approval to run privacy, fingerprinting, or security research. By using the service or this repository, you confirm that you are working on systems you own or that you have explicit permission to test, and that you understand the legal and contractual obligations tied to that work.
+BotCloud exists for teams who already have written approval to run automation, fingerprinting, or security research. By using the service or this repository, you confirm that you are working on systems you own or that you have explicit permission to test, and that you understand the legal and contractual obligations tied to that work.
 
 ## Permitted Use
 
 BotCloud may be used for:
 
-- Internal privacy or automation workflows vetted by your compliance or security team
+- Internal automation workflows vetted by your compliance or security team
 - Browser compatibility testing and performance benchmarking
 - Security research, fingerprint resilience testing, and defensive validation in controlled environments
 - Authorized penetration testing engagements with written approval
@@ -39,7 +39,7 @@ If you cannot confirm that your use case is permitted, stop and consult legal co
 
 - BotCloud may experience downtime, API changes, or feature adjustments without prior notice.
 - Compatibility with specific targets is not guaranteed; external websites may change detection logic at any time.
-- The service does not guarantee anonymity or undetectability. Customers are responsible for any legal or regulatory fallout stemming from their privacy or automation work.
+- The service does not guarantee anonymity or undetectability. Customers are responsible for any legal or regulatory fallout stemming from their automation work.
 
 ## Liability & Indemnification
 
