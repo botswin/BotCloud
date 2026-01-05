@@ -21,12 +21,33 @@ curl -H "Authorization: Bearer your-token" https://cloud.bots.win/api/quota
 **Response:**
 ```json
 {
-  "totalQuota": 10000,
-  "usedQuota": 2350,
   "remainingQuota": 7650,
-  "percentUsed": 23.5
+  "pricing": {
+    "baseRate": 1,
+    "multiplier": 1.35,
+    "effectiveRate": 1.35,
+    "breakdown": {
+      "base": 1.0,
+      "maxSessions": 1,
+      "sessionMultiplier": 1.0,
+      "userDataMax": 5,
+      "userDataPremium": 0,
+      "hasLiveURLAccess": false,
+      "liveURLPremium": 0
+    }
+  }
 }
 ```
+
+**Response Fields:**
+
+| Field | Description |
+|-------|-------------|
+| `remainingQuota` | Available quota balance |
+| `pricing.baseRate` | Base quota consumption per minute |
+| `pricing.multiplier` | Total billing multiplier for your account |
+| `pricing.effectiveRate` | Actual quota per minute (baseRate × multiplier) |
+| `pricing.breakdown` | Detailed multiplier components |
 
 ### GET /api/usage
 
@@ -247,13 +268,13 @@ See [CLI Parameters](cli-parameters.md) for all available connection parameters.
 
 ## Billing
 
-BotCloud uses usage-based billing:
+BotCloud uses usage-based billing with multiplier pricing:
 
-| Unit | Cost |
-|------|------|
-| 1 minute of browser session time | 1 quota unit |
+- **Base rate**: 1 quota per minute
+- **Multiplier**: Based on subscription tier (session concurrency, features)
+- **Final cost**: Base rate × Multiplier
 
-> Pricing is still being finalized. Contact your service provider for the latest unit costs.
+**📖 [View detailed pricing →](https://bots.win/en/pricing/)**
 
 ---
 

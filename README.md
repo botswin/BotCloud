@@ -19,7 +19,7 @@ Connect to cloud Chrome with your familiar Puppeteer or Playwright code — no d
 - Existing scripts keep working (Puppeteer, Playwright, Selenium, CDP) with minimal tweaks for privacy testing.
 - Mandatory proxy plus region controls with usage-based billing make compliance reviews easy.
 
-> 💡 **Pricing:** Billing is usage-based (1 minute = 1 quota unit). Contact your service provider for the latest rates.
+> 💡 **Pricing:** Usage-based billing at **$0.6/hour** (1 quota = 1 minute). Concurrent sessions and premium features use multiplier pricing. **[View pricing details →](https://bots.win/en/pricing/)**
 > ⚖️ Review the [Legal Disclaimer](DISCLAIMER.md) and [Responsible Use Guidelines](RESPONSIBLE_USE.md) before onboarding.
 
 **🌐 Learn more:** Visit **[bots.win](https://bots.win)** for documentation, pricing, and support.
