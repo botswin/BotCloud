@@ -19,7 +19,7 @@ Connect to cloud Chrome with your familiar Puppeteer or Playwright code — no d
 - Existing scripts keep working (Puppeteer, Playwright, Selenium, CDP) with minimal tweaks for privacy testing.
 - Mandatory proxy plus region controls with usage-based billing make compliance reviews easy.
 
-> 💡 **Pricing:** Usage-based billing at **$0.6/hour** (1 quota = 1 minute). Concurrent sessions and premium features use multiplier pricing. **[View pricing details →](https://bots.win/en/pricing/)**
+> 💡 **Pricing:** Usage-based billing at **$0.6/hour** (1 quota = 1 minute). Dynamic multiplier based on concurrent sessions, Cloak Tier, and premium features. **[View pricing details →](https://bots.win/en/pricing/)**
 > ⚖️ Review the [Legal Disclaimer](DISCLAIMER.md) and [Responsible Use Guidelines](RESPONSIBLE_USE.md) before onboarding.
 
 **🌐 Learn more:** Visit **[bots.win](https://bots.win)** for documentation, pricing, and support.
@@ -103,6 +103,14 @@ const params = new URLSearchParams({
 | `--proxy-server` | `user:pass@proxy.example.com:4600` | ✅ |
 | `device_type` | `mac` / `win` / `android` | Optional (default: `mac`) |
 | `user_data_id` | `udd_xxxxxxxxxxxx` | Optional |
+| `super_stealth` | `true` / `false` | Optional (requires Super Stealth access) |
+
+### Premium Features
+
+| Feature | Parameter | Description | Premium |
+|---------|-----------|-------------|---------|
+| **Super Stealth Mode** | `super_stealth=true` | Maximum anti-detection capability | +0.40x |
+| **LiveURL** | See [LiveURL docs](docs/liveurl.md) | Real-time browser visualization | +0.35x |
 
 BotCloud supports 50+ CLI parameters for timezone, locale, fingerprint variation, and more.
 

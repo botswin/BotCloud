@@ -18,6 +18,42 @@ BotCloud supports 50+ CLI parameters for runtime fingerprint configuration. Thes
 
 ---
 
+## Premium Features
+
+These parameters require specific access permissions on your account.
+
+| Parameter | Values | Description | Requires |
+|-----------|--------|-------------|----------|
+| `super_stealth` | `true` / `false` | Enable Super Stealth Mode - maximum anti-detection capability | Super Stealth access |
+
+### Super Stealth Mode
+
+Super Stealth Mode provides maximum anti-detection capability. This is useful for:
+
+- Passing advanced bot detection systems
+- Interacting with heavily protected sites
+- Scenarios requiring the strongest fingerprint defense
+
+**Usage:**
+```javascript
+const params = new URLSearchParams({
+  token: 'your-token',
+  '--proxy-server': 'user:pass@proxy.example.com:8080',
+  device_type: 'mac',
+  super_stealth: 'true'  // Enable Super Stealth Mode
+});
+
+const browser = await puppeteer.connect({
+  browserWSEndpoint: `wss://cloud.bots.win?${params}`
+});
+```
+
+**Notes:**
+- Requires Super Stealth access on your account (contact your provider to enable)
+- Adds +0.40 billing premium
+
+---
+
 ## Device & Identity
 
 | Parameter | Values | Default | Description |

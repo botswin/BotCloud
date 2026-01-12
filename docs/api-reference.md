@@ -22,18 +22,26 @@ curl -H "Authorization: Bearer your-token" https://cloud.bots.win/api/quota
 ```json
 {
   "remainingQuota": 7650,
+  "sessions": {
+    "max": 5,
+    "active": 2
+  },
   "pricing": {
     "baseRate": 1,
-    "multiplier": 1.35,
-    "effectiveRate": 1.35,
+    "current": {
+      "multiplier": 1.3,
+      "effectiveRate": 1.3
+    },
+    "max": {
+      "multiplier": 1.8,
+      "effectiveRate": 1.8
+    },
     "breakdown": {
-      "base": 1.0,
-      "maxSessions": 1,
-      "sessionMultiplier": 1.0,
-      "userDataMax": 5,
-      "userDataPremium": 0,
-      "hasLiveURLAccess": false,
-      "liveURLPremium": 0
+      "sessionMultiplier": 1.3,
+      "cloakTierPremium": 0.5,
+      "userDataPremium": 0.1,
+      "liveURLPremium": 0.35,
+      "superStealthPremium": 0.40
     }
   }
 }
@@ -44,10 +52,17 @@ curl -H "Authorization: Bearer your-token" https://cloud.bots.win/api/quota
 | Field | Description |
 |-------|-------------|
 | `remainingQuota` | Available quota balance |
+| `sessions.max` | Maximum allowed concurrent sessions |
+| `sessions.active` | Currently active sessions |
 | `pricing.baseRate` | Base quota consumption per minute |
-| `pricing.multiplier` | Total billing multiplier for your account |
-| `pricing.effectiveRate` | Actual quota per minute (baseRate × multiplier) |
+| `pricing.current` | Billing rate based on current active sessions |
+| `pricing.max` | Billing rate if using maximum sessions |
 | `pricing.breakdown` | Detailed multiplier components |
+| `pricing.breakdown.sessionMultiplier` | Multiplier based on concurrent session count |
+| `pricing.breakdown.cloakTierPremium` | Premium for Cloak Tier (basic/pro/ent1/ent2/ent3) |
+| `pricing.breakdown.userDataPremium` | Premium for User Data quota |
+| `pricing.breakdown.liveURLPremium` | Premium for LiveURL access (+0.35) |
+| `pricing.breakdown.superStealthPremium` | Premium for Super Stealth Mode (+0.40) |
 
 ### GET /api/usage
 
@@ -268,11 +283,50 @@ See [CLI Parameters](cli-parameters.md) for all available connection parameters.
 
 ## Billing
 
-BotCloud uses usage-based billing with multiplier pricing:
+BotCloud uses dynamic usage-based billing. Your rate is calculated based on actual resource usage.
+
+### Billing Formula
+
+```
+Total Multiplier = Session Multiplier + Cloak Tier Premium + User Data Premium + LiveURL Premium + Super Stealth Premium
+Effective Rate = Base Rate × Total Multiplier
+```
 
 - **Base rate**: 1 quota per minute
-- **Multiplier**: Based on subscription tier (session concurrency, features)
-- **Final cost**: Base rate × Multiplier
+
+### Session Multiplier
+
+Based on concurrent session count:
+
+| Sessions | Multiplier |
+|----------|------------|
+| 1 | 1.0x |
+| 2-5 | 1.3x |
+| 6-10 | 1.8x |
+| 11-20 | 2.7x |
+| 21-50 | 4.5x |
+| 51-100 | 6.0x |
+| 101-200 | 10.5x |
+| 201-300 | 15.5x |
+| 301-500 | 23.0x |
+| 501-1000 | 44.0x |
+
+### Cloak Tier Premium
+
+| Tier | Premium | Features |
+|------|---------|----------|
+| basic | +0 | Basic proxy, device fingerprint, timezone/locale/geolocation, Canvas/WebGL noise |
+| pro | +0.5 | + Browser brand override, UA-CH consistency, keep window active, WebRTC ICE control |
+| ent1 | +1.0 | + Per-context proxy, local DNS resolver, performance timing scaling |
+| ent2 | +1.5 | + Deterministic noise seed, precise FPS emulation, Widevine CDM |
+| ent3 | +2.0 | + SOCKS5 UDP/QUIC tunneling |
+
+### Feature Premiums
+
+| Feature | Premium | Description |
+|---------|---------|-------------|
+| LiveURL | +0.35 | Real-time video streaming + WebSocket (high bandwidth) |
+| Super Stealth | +0.40 | Maximum anti-detection capability |
 
 **📖 [View detailed pricing →](https://bots.win/en/pricing/)**
 

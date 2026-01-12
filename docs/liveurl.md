@@ -176,6 +176,17 @@ When a user opens the LiveURL in their browser:
 
 ---
 
+## Access & Billing
+
+| Aspect | Details |
+|--------|---------|
+| **Access** | Requires LiveURL access enabled on your account |
+| **Billing Premium** | +0.35x multiplier when LiveURL is enabled |
+
+**Note:** LiveURL access is an account-level permission. Contact your service provider to enable this feature if needed.
+
+---
+
 ## Important Notes
 
 | Aspect | Details |
@@ -184,7 +195,7 @@ When a user opens the LiveURL in their browser:
 | **Security** | Tokens are single-use and expire after timeout or completion |
 | **Updates** | Real-time screen at approximately 5-10 FPS |
 | **Interaction** | Full click, type, scroll, navigate support |
-| **Quota** | LiveURL time counts toward usage quota |
+| **Quota** | LiveURL time counts toward usage quota (with +0.35x premium) |
 | **Timeout** | `liveComplete` fires on both user completion and timeout |
 
 ---

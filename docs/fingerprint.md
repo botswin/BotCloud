@@ -147,6 +147,19 @@ async function multiPlatformExample(token, proxy, userDataId) {
 
 ---
 
+## Fingerprint Access Levels
+
+BotCloud supports different fingerprint access levels based on account permissions:
+
+| Access Level | Description |
+|--------------|-------------|
+| Standard (default) | Pre-configured device profiles (`mac`, `win`, `android`) for most use cases |
+| Advanced | Customized fingerprints - full control over fingerprint parameters |
+
+**Note:** Advanced fingerprint access requires specific permissions on your account. Contact your service provider to enable customized fingerprint capabilities if needed.
+
+---
+
 ## Summary
 
 | Scenario | Fingerprint | Browser State |
