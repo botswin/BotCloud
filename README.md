@@ -5,7 +5,7 @@
 <p align="center">
   🛡️ <strong>Fingerprint Defense</strong> - Validated against 31+ detection systems<br>
   ⚡ <strong>Zero Config</strong> - Auto-detects timezone, locale, language from proxy IP<br>
-  🔍 <strong>LiveURL</strong> - Visual debugging and real-time monitoring
+  🔍 <strong>DevTools</strong> - Remote browser debugging via Chrome DevTools
 </p>
 
 ---
@@ -110,7 +110,7 @@ const params = new URLSearchParams({
 | Feature | Parameter | Description | Premium |
 |---------|-----------|-------------|---------|
 | **Super Stealth Mode** | `super_stealth=true` | Maximum anti-detection capability | +0.40x |
-| **LiveURL** | See [LiveURL docs](docs/liveurl.md) | Real-time browser visualization | +0.35x |
+| **DevTools** | See [DevTools docs](docs/devtools.md) | Remote browser debugging via Chrome DevTools | +0.35x |
 
 BotCloud supports 50+ CLI parameters for timezone, locale, fingerprint variation, and more.
 
@@ -118,21 +118,21 @@ BotCloud supports 50+ CLI parameters for timezone, locale, fingerprint variation
 
 ---
 
-## LiveURL - Visual Debugging
+## DevTools - Remote Browser Debugging
 
-LiveURL provides real-time browser visualization for debugging automated workflows.
+DevTools provides remote access to Chrome DevTools for debugging automated workflows.
 
 ```javascript
 const cdp = await page.createCDPSession();
-cdp.on("liveComplete", () => console.log("User done"));
+cdp.on("devtoolsComplete", () => console.log("Session complete"));
 
-const { liveURL } = await cdp.send("liveURL", { timeout: 120000 });
-console.log(`Open: ${liveURL}`);
+const { devtoolsURL } = await cdp.send("devtools", { timeout: 120000 });
+console.log(`Open: ${devtoolsURL}`);
 
-await new Promise(resolve => cdp.on("liveComplete", resolve));
+await new Promise(resolve => cdp.on("devtoolsComplete", resolve));
 ```
 
-**📖 [View full LiveURL documentation →](docs/liveurl.md)**
+**📖 [View full DevTools documentation →](docs/devtools.md)**
 
 ---
 
@@ -159,7 +159,7 @@ await new Promise(resolve => cdp.on("liveComplete", resolve));
 | Playwright | Node.js | [`examples/playwright/node/quickstart.mjs`](examples/playwright/node/quickstart.mjs) |
 | Playwright | Python | [`examples/playwright/python/quickstart.py`](examples/playwright/python/quickstart.py) |
 | CLI Config | Node.js | [`examples/cli/node/custom-config.mjs`](examples/cli/node/custom-config.mjs) |
-| LiveURL | Node.js | [`examples/liveurl/node/puppeteer-liveurl.mjs`](examples/liveurl/node/puppeteer-liveurl.mjs) |
+| DevTools | Node.js | [`examples/devtools/node/puppeteer-devtools.mjs`](examples/devtools/node/puppeteer-devtools.mjs) |
 | User Data | Node.js | [`examples/user-data/node/user-data.mjs`](examples/user-data/node/user-data.mjs) |
 | CDP | Go | [`examples/cdp/go/chromedp-quickstart.go`](examples/cdp/go/chromedp-quickstart.go) |
 | CDP | Java | [`examples/cdp/java/CdpQuickstart.java`](examples/cdp/java/CdpQuickstart.java) |
@@ -230,6 +230,6 @@ Track these metrics:
 - **Examples**: [`examples/`](examples/)
 - **Fingerprint Guide**: [`docs/fingerprint.md`](docs/fingerprint.md)
 - **CLI Parameters**: [`docs/cli-parameters.md`](docs/cli-parameters.md)
-- **LiveURL Guide**: [`docs/liveurl.md`](docs/liveurl.md)
+- **DevTools Guide**: [`docs/devtools.md`](docs/devtools.md)
 - **API Reference**: [`docs/api-reference.md`](docs/api-reference.md)
 - **Legal**: [`DISCLAIMER.md`](DISCLAIMER.md) | [`RESPONSIBLE_USE.md`](RESPONSIBLE_USE.md)

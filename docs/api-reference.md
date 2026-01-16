@@ -40,7 +40,7 @@ curl -H "Authorization: Bearer your-token" https://cloud.bots.win/api/quota
       "sessionMultiplier": 1.3,
       "cloakTierPremium": 0.5,
       "userDataPremium": 0.1,
-      "liveURLPremium": 0.35,
+      "devtoolsPremium": 0.35,
       "superStealthPremium": 0.40
     }
   }
@@ -61,7 +61,7 @@ curl -H "Authorization: Bearer your-token" https://cloud.bots.win/api/quota
 | `pricing.breakdown.sessionMultiplier` | Multiplier based on concurrent session count |
 | `pricing.breakdown.cloakTierPremium` | Premium for Cloak Tier (basic/pro/ent1/ent2/ent3) |
 | `pricing.breakdown.userDataPremium` | Premium for User Data quota |
-| `pricing.breakdown.liveURLPremium` | Premium for LiveURL access (+0.35) |
+| `pricing.breakdown.devtoolsPremium` | Premium for DevTools access (+0.35) |
 | `pricing.breakdown.superStealthPremium` | Premium for Super Stealth Mode (+0.40) |
 
 ### GET /api/usage
@@ -288,7 +288,7 @@ BotCloud uses dynamic usage-based billing. Your rate is calculated based on actu
 ### Billing Formula
 
 ```
-Total Multiplier = Session Multiplier + Cloak Tier Premium + User Data Premium + LiveURL Premium + Super Stealth Premium
+Total Multiplier = Session Multiplier + Cloak Tier Premium + User Data Premium + DevTools Premium + Super Stealth Premium
 Effective Rate = Base Rate × Total Multiplier
 ```
 
@@ -315,17 +315,17 @@ Based on concurrent session count:
 
 | Tier | Premium | Features |
 |------|---------|----------|
-| basic | +0 | Basic proxy, device fingerprint, timezone/locale/geolocation, Canvas/WebGL noise |
-| pro | +0.5 | + Browser brand override, UA-CH consistency, keep window active, WebRTC ICE control |
-| ent1 | +1.0 | + Per-context proxy, local DNS resolver, performance timing scaling |
-| ent2 | +1.5 | + Deterministic noise seed, precise FPS emulation, Widevine CDM |
-| ent3 | +2.0 | + SOCKS5 UDP/QUIC tunneling |
+| basic | +0 | Proxy support (HTTP/HTTPS/SOCKS5/SOCKS5H), noise controls (Canvas/WebGL/Audio/ClientRects/TextRects), auto geo detection from proxy IP, Playwright/Puppeteer integration, cross-platform profiles (mac/win), basic WebRTC control |
+| pro | +1.0 | + Random history injection (`--bot-inject-random-history`), always-active windows (`--bot-always-active`), Android profile support |
+| ent1 | +2.0 | + Cookie management (`--bot-cookies`), proxy IP specification (`--proxy-ip`), local DNS (`--bot-local-dns`), **per-context proxy**, custom geo override, console message suppression (`--bot-disable-console-message`), WebRTC ICE control (`--bot-webrtc-ice`) |
+| ent2 | +3.0 | + Browser brand spoofing (`--bot-config-browser-brand`), deterministic noise seed (`--bot-noise-seed`), time scaling (`--bot-time-scale`), **precision FPS simulation**, **Widevine CDM**, **DRM simulation**, **extension sync** |
+| ent3 | +4.0 | + SOCKS5 UDP/QUIC tunneling, Mirror distributed sync (`--bot-mirror-*`) |
 
 ### Feature Premiums
 
 | Feature | Premium | Description |
 |---------|---------|-------------|
-| LiveURL | +0.35 | Real-time video streaming + WebSocket (high bandwidth) |
+| DevTools | +0.35 | Remote browser debugging via Chrome DevTools |
 | Super Stealth | +0.40 | Maximum anti-detection capability |
 
 **📖 [View detailed pricing →](https://bots.win/en/pricing/)**

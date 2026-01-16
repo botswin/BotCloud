@@ -54,16 +54,73 @@ const browser = await puppeteer.connect({
 
 ---
 
+## Cloak Tier Reference
+
+BotCloud supports tiered feature access based on your account subscription.
+
+| Tier | Access Level | Premium | BotBrowser Plan |
+|------|--------------|---------|-----------------|
+| Basic | Basic User | +0 | Starter |
+| PRO | Pro Subscription | +0.5 | PRO |
+| ENT1 | Enterprise Tier 1 | +1.0 | ENT Tier 1 |
+| ENT2 | Enterprise Tier 2 | +1.5 | ENT Tier 2 |
+| ENT3 | Enterprise Tier 3 | +2.0 | ENT Tier 3 |
+
+### Tier Feature Summary
+
+**Basic (Starter)**:
+- Proxy support (HTTP, HTTPS, SOCKS5, SOCKS5H)
+- Noise controls (Canvas, WebGL, Audio, ClientRects, TextRects)
+- Auto geo detection from proxy IP
+- Playwright/Puppeteer/CDP integration
+- Cross-platform profiles (mac/win)
+- Basic WebRTC control
+
+**PRO**:
+- All Basic features, plus:
+- Random history injection (`--bot-inject-random-history`)
+- Always-active windows (`--bot-always-active`)
+- Android profile support
+
+**ENT1**:
+- All PRO features, plus:
+- Cookie management (`--bot-cookies`)
+- Proxy IP specification (`--proxy-ip`)
+- Local DNS resolver (`--bot-local-dns`)
+- **Per-context proxy**
+- Custom geo override
+- Console message suppression (`--bot-disable-console-message`)
+- WebRTC ICE control (`--bot-webrtc-ice`)
+
+**ENT2**:
+- All ENT1 features, plus:
+- Browser brand spoofing (`--bot-config-browser-brand`)
+- Deterministic noise seed (`--bot-noise-seed`)
+- Time scaling (`--bot-time-scale`)
+- **Precision FPS simulation**
+- **Widevine CDM**
+- **DRM simulation**
+- **Extension sync**
+
+**ENT3**:
+- All ENT2 features, plus:
+- SOCKS5 UDP/QUIC tunneling
+- Mirror distributed sync (`--bot-mirror-*`)
+
+---
+
 ## Device & Identity
 
 | Parameter | Values | Default | Description |
 |-----------|--------|---------|-------------|
-| `device_type` | `mac` / `win` / `android` | `mac` | Device fingerprint profile |
+| `device_type` | `mac` / `win` / `android` | `mac` | Device fingerprint profile. **Note:** `android` requires PRO tier |
 | `user_data_id` | `udd_xxxxxxxxxxxx` | - | User Data ID for persistent state |
 | `--bot-config-timezone` | `America/New_York`, `auto` | `auto` | Timezone (auto = from proxy IP) |
 | `--bot-config-locale` | `en-US`, `ja-JP`, `auto` | `auto` | Browser locale |
 | `--bot-config-languages` | `en,zh,ja` | `auto` | Language preferences (comma-separated) |
 | `--bot-config-location` | `35.6762,139.6503` | `auto` | Geolocation coordinates (lat,lng) |
+
+> **Important:** Auto geo detection (`auto`) is available in Basic tier. Custom geo override (specifying explicit values) requires ENT1 tier.
 
 ### Fingerprint Assignment Behavior
 
@@ -82,7 +139,9 @@ BotCloud intelligently assigns fingerprints based on your connection parameters:
 
 ---
 
-## Browser Brand & Version
+## Browser Brand & Version <sup>ENT2</sup>
+
+> **Requires:** ENT2 tier or higher
 
 | Parameter | Values | Description |
 |-----------|--------|-------------|
@@ -132,30 +191,32 @@ BotCloud intelligently assigns fingerprints based on your connection parameters:
 
 ## Behavior Switches
 
-| Parameter | Description |
-|-----------|-------------|
-| `--bot-disable-debugger` | Ignore JavaScript debugger statements |
-| `--bot-always-active` | Keep window active even when unfocused |
-| `--bot-disable-console-message` | Suppress console output from CDP logs |
-| `--bot-inject-random-history` | Inject synthetic browsing history |
-| `--bot-webrtc-ice` | Override STUN/TURN endpoints |
-| `--bot-time-scale` | Scale performance.now() intervals (0.80-0.99) |
-| `--bot-noise-seed` | Deterministic noise seed (1.0-1.2) |
-| `--bot-title` | Custom browser window title |
-| `--bot-mobile-force-touch` | Force touch events on mobile emulation |
-| `--bot-cookies` | Pre-set cookies (JSON array format) |
-| `--bot-bookmarks` | Pre-set bookmarks (JSON array format) |
+| Parameter | Description | Tier |
+|-----------|-------------|------|
+| `--bot-disable-debugger` | Ignore JavaScript debugger statements | Basic |
+| `--bot-title` | Custom window title and taskbar/dock label | Basic |
+| `--bot-bookmarks` | Load bookmarks from JSON at startup | Basic |
+| `--bot-mobile-force-touch` | Force touch events on or off for mobile simulation | Basic |
+| `--bot-always-active` | Keep windows active even when unfocused | **PRO** |
+| `--bot-inject-random-history` | Inject synthetic browsing history | **PRO** |
+| `--bot-cookies` | Load cookies from inline JSON or file | **ENT1** |
+| `--bot-disable-console-message` | Suppress console output from CDP logs | **ENT1** |
+| `--bot-webrtc-ice` | Override STUN/TURN endpoints | **ENT1** |
+| `--bot-noise-seed` | Deterministic noise seed (1.0-1.2) | **ENT2** |
+| `--bot-time-scale` | Scale performance.now() intervals (0.80-0.99) | **ENT2** |
+| `--bot-mirror-controller-endpoint` | Launch as Mirror controller instance | **ENT3** |
+| `--bot-mirror-client-endpoint` | Launch as Mirror client instance | **ENT3** |
 
 ---
 
 ## Proxy Configuration
 
-| Parameter | Description |
-|-----------|-------------|
-| `--proxy-server` | Proxy URL with credentials (required) |
-| `--proxy-ip` | Skip IP detection for performance |
-| `--bot-local-dns` | Use local DNS resolver |
-| `--bot-ip-service` | Custom IP detection service URL |
+| Parameter | Description | Tier |
+|-----------|-------------|------|
+| `--proxy-server` | Proxy URL with credentials (required) | Basic |
+| `--bot-ip-service` | Custom IP detection service URL | Basic |
+| `--proxy-ip` | Skip IP detection for performance | **ENT1** |
+| `--bot-local-dns` | Use local DNS resolver | **ENT1** |
 
 **Supported Proxy Protocols:**
 - HTTP: `http://user:pass@host:port`
@@ -163,7 +224,9 @@ BotCloud intelligently assigns fingerprints based on your connection parameters:
 - SOCKS5: `socks5://user:pass@host:port`
 - SOCKS5H: `socks5h://user:pass@host:port` (hostname resolved by proxy)
 
-**UDP over SOCKS5:** Automatic SOCKS5 UDP ASSOCIATE support tunnels QUIC traffic and STUN probes through the proxy.
+**Per-context proxy <sup>ENT1</sup>:** Different proxy per BrowserContext via `createBrowserContext({ proxy })`.
+
+**UDP over SOCKS5 <sup>ENT3</sup>:** Automatic SOCKS5 UDP ASSOCIATE support tunnels QUIC traffic and STUN probes through the proxy.
 
 ---
 
@@ -232,6 +295,24 @@ When set to `auto`, BotCloud derives values from your proxy IP:
 | location | Approximate coordinates from IP |
 
 **Tip:** Let auto-detection handle these unless you need specific overrides. This ensures fingerprint consistency with your proxy's geographic location.
+
+---
+
+## Advanced Features
+
+### DRM & Media (ENT2)
+
+| Feature | Description |
+|---------|-------------|
+| Precision FPS simulation | Match target refresh rates (60Hz, 120Hz, 144Hz) regardless of host hardware |
+| Widevine CDM | Built-in Widevine component (no download on startup) |
+| DRM simulation | Platform-specific DRM capability responses, authentic `mediaCapabilities.decodingInfo()` reporting |
+
+### Browser Sync (ENT2)
+
+| Feature | Description |
+|---------|-------------|
+| Extension sync | Sync extensions with Chrome stable versions |
 
 ---
 

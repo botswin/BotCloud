@@ -1,23 +1,22 @@
 /**
- * BotCloud LiveURL Example - Playwright (Node.js)
+ * BotCloud DevTools Example - Puppeteer (Node.js)
  *
- * This example demonstrates how to use LiveURL to pause automation and let
- * a human interact with the browser in real-time. This is perfect for:
- * - Solving CAPTCHAs
- * - Handling two-factor authentication
- * - Manual login flows
+ * This example demonstrates how to use DevTools to debug and inspect
+ * automation in real-time using Chrome DevTools. This is perfect for:
  * - Debugging automation scripts
+ * - Inspecting DOM and network requests
+ * - Solving CAPTCHAs with human assistance
+ * - Handling two-factor authentication
  *
  * Prerequisites:
- *   npm install playwright
+ *   npm install puppeteer-core
  *
  * Usage:
  *   1. Modify the CONFIG section below with your token and proxy
- *   2. Run: node examples/liveurl/node/playwright-liveurl.mjs
- *   3. Open the displayed LiveURL in your browser
- *   4. Interact with the page (it will show live updates)
- *   5. Click "Done" when finished
- *   6. Script will continue automatically
+ *   2. Run: node examples/devtools/node/puppeteer-devtools.mjs
+ *   3. Open the displayed DevTools URL in your browser
+ *   4. Use Chrome DevTools to inspect and debug
+ *   5. Wait for timeout or close browser to continue
  */
 
 // ============ Configuration (Modify these) ============
@@ -25,11 +24,11 @@ const CONFIG = {
   token: "your-token-here",
   proxy: "username:password@proxy.example.com:4600",
   deviceType: "mac", // or "win", "android"
-  liveTimeout: 120000, // 2 minutes (in milliseconds)
+  devtoolsTimeout: 120000, // 2 minutes (in milliseconds)
 };
 // ======================================================
 
-import { chromium } from 'playwright';
+import puppeteer from 'puppeteer-core';
 
 function buildEndpoint() {
   if (!CONFIG.token || !CONFIG.proxy) {
@@ -46,74 +45,74 @@ function buildEndpoint() {
 
 async function main() {
   console.log('='.repeat(60));
-  console.log('BotCloud LiveURL Example - Playwright');
+  console.log('BotCloud DevTools Example - Puppeteer');
   console.log('='.repeat(60));
 
   let browser;
   try {
     // Connect to BotCloud
     console.log('\n🌐 Connecting to BotCloud...');
-    browser = await chromium.connectOverCDP(buildEndpoint());
+    browser = await puppeteer.connect({
+      browserWSEndpoint: buildEndpoint(),
+    });
     console.log('✅ Connected!');
 
-    // Get or create context
-    console.log('\n📂 Getting browser context...');
-    const context = browser.contexts()[0] || await browser.newContext();
-    const page = await context.newPage();
-    console.log('✅ Context and page ready');
+    // Create a new page
+    console.log('\n📄 Opening new page...');
+    const page = await browser.newPage();
 
-    // Navigate to a login page (example)
-    console.log('\n🔗 Navigating to example form...');
-    await page.goto('https://httpbin.org/forms/post', { waitUntil: 'networkidle' });
+    // Navigate to a page (example)
+    console.log('🔗 Navigating to httpbin.org/forms/post...');
+    await page.goto('https://httpbin.org/forms/post', { waitUntil: 'networkidle0' });
     console.log('✅ Page loaded');
 
-    // Create CDP session for LiveURL
+    // Create CDP session for DevTools
     console.log('\n🔌 Creating CDP session...');
-    const cdp = await context.newCDPSession(page);
+    const cdp = await page.createCDPSession();
     console.log('✅ CDP session created');
 
-    // Set up completion handler BEFORE requesting LiveURL
-    console.log('\n👂 Setting up liveComplete event handler...');
+    // Set up completion handler BEFORE requesting DevTools
+    console.log('\n👂 Setting up devtoolsComplete event handler...');
     const completionPromise = new Promise((resolve) => {
-      cdp.on('liveComplete', () => {
-        console.log('\n✅ User completed interaction!');
+      cdp.on('devtoolsComplete', () => {
+        console.log('\n✅ DevTools session ended!');
         resolve();
       });
     });
 
-    // Request LiveURL
-    console.log(`\n🔗 Requesting LiveURL (timeout: ${CONFIG.liveTimeout / 1000}s)...`);
-    const { liveURL } = await cdp.send('liveURL', {
-      timeout: CONFIG.liveTimeout
+    // Request DevTools
+    console.log(`\n🔗 Requesting DevTools (timeout: ${CONFIG.devtoolsTimeout / 1000}s)...`);
+    const { devtoolsURL } = await cdp.send('devtools', {
+      timeout: CONFIG.devtoolsTimeout
     });
 
-    // Display the LiveURL
+    // Display the DevTools URL
     console.log('\n' + '='.repeat(60));
-    console.log('🎯 LiveURL Generated!');
+    console.log('🎯 DevTools URL Generated!');
     console.log('='.repeat(60));
     console.log('\n📱 Open this URL in your browser:');
-    console.log(`\n   ${liveURL}\n`);
+    console.log(`\n   ${devtoolsURL}\n`);
     console.log('Instructions:');
     console.log('  1. Open the URL above in any web browser');
-    console.log('  2. You will see a live view of the browser page');
-    console.log('  3. You can click, type, and interact normally');
-    console.log('  4. Try filling out the form or navigating around');
-    console.log('  5. Click the "Done" button when finished');
-    console.log('\n⏳ Waiting for you to complete interaction...\n');
+    console.log('  2. You will see the Chrome DevTools interface');
+    console.log('  3. Use Elements, Console, Network tabs to inspect');
+    console.log('  4. You can execute JavaScript in the Console');
+    console.log('  5. Session ends automatically after timeout');
+    console.log('\n⏳ Waiting for DevTools session to complete...\n');
 
-    // Wait for user to complete
+    // Wait for session to complete
     await completionPromise;
 
-    // Continue automation after user interaction
+    // Continue automation after DevTools session
     console.log('\n🤖 Resuming automation...');
-    console.log('📄 Checking page state after user interaction...');
+    console.log('📄 Checking page state...');
 
     const currentUrl = page.url();
     const pageTitle = await page.title();
     console.log(`   Current URL: ${currentUrl}`);
     console.log(`   Page title: ${pageTitle}`);
 
-    // Example: Extract form data if user filled it
+    // Example: Extract form data
     const formData = await page.evaluate(() => {
       const form = document.querySelector('form');
       if (!form) return null;
@@ -151,10 +150,10 @@ async function main() {
   console.log('✅ Example completed successfully!');
   console.log('='.repeat(60));
   console.log('\nKey takeaways:');
-  console.log('  • LiveURL lets humans interact during automation');
-  console.log('  • Perfect for CAPTCHAs, 2FA, and manual steps');
-  console.log('  • Use CDP session to request LiveURL and listen for completion');
-  console.log('  • User interaction time counts toward quota usage');
+  console.log('  • DevTools provides full Chrome DevTools for debugging');
+  console.log('  • Perfect for inspecting DOM, network, console');
+  console.log('  • Use CDP session to request DevTools and listen for completion');
+  console.log('  • DevTools session time counts toward quota usage');
 }
 
 main().catch((error) => {

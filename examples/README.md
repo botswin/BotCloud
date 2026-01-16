@@ -156,29 +156,29 @@ BotCloud supports 50+ CLI parameters for runtime fingerprint configuration. By d
 
 See the [Connection Parameters](../README.md#connection-parameters) section in the main README for the complete list.
 
-#### LiveURL - Visual Debugging & Monitoring
+#### DevTools - Remote Browser Debugging
 
-LiveURL provides real-time browser visualization for debugging automated workflows. Request a LiveURL to see exactly what your automation script encounters in a live browser view.
+DevTools provides remote access to Chrome DevTools for debugging and inspecting automated workflows. Request a DevTools session to get a URL that opens the full Chrome DevTools interface.
 
 | Language | Path | Description |
 |----------|------|-------------|
-| **Node.js (Puppeteer)** | [`liveurl/node/puppeteer-liveurl.mjs`](liveurl/node/puppeteer-liveurl.mjs) | Visual debugging session with LiveURL using Puppeteer |
-| **Node.js (Playwright)** | [`liveurl/node/playwright-liveurl.mjs`](liveurl/node/playwright-liveurl.mjs) | Visual debugging session with LiveURL using Playwright |
+| **Node.js (Puppeteer)** | [`devtools/node/puppeteer-devtools.mjs`](devtools/node/puppeteer-devtools.mjs) | Remote debugging session using Puppeteer |
+| **Node.js (Playwright)** | [`devtools/node/playwright-devtools.mjs`](devtools/node/playwright-devtools.mjs) | Remote debugging session using Playwright |
 
-**When to use LiveURL:**
-- **Debug automation issues** - See exactly what your script encounters
+**When to use DevTools:**
+- **Debug automation issues** - Inspect DOM, network, console in real-time
 - **Monitor long-running jobs** - Check progress without interrupting execution
-- **Verify page states** - Confirm your script reached the expected state
-- **Team collaboration** - Share a live view with teammates for troubleshooting
-- **Visual logging** - Inspect automation state at key moments
+- **Verify page states** - Inspect elements and state at any point
+- **Team collaboration** - Share a DevTools URL with teammates for troubleshooting
+- **Performance profiling** - Use DevTools Performance tab to analyze scripts
 
 **Key features:**
-- Real-time screen updates (approximately 5-10 FPS)
-- Full interaction: click, type, scroll, navigate
-- Configurable timeout (defaults to 5 minutes)
-- `liveComplete` event signals when user clicks "Done" or timeout expires
+- Full Chrome DevTools interface (Elements, Console, Network, etc.)
+- Real-time inspection and modification
+- Configurable timeout (defaults to 5 minutes, max 30 minutes)
+- `devtoolsComplete` event signals when session ends
 - Works with both Puppeteer and Playwright via CDP sessions
-- LiveURL tokens are single-use and expire after completion
+- DevTools tokens are single-use and expire after timeout
 
 #### CDP Multi-Language - Go, Java, Ruby
 
@@ -253,9 +253,9 @@ node examples/puppeteer/node/quickstart.mjs
 # Playwright
 node examples/playwright/node/quickstart.mjs
 
-# LiveURL - Visual Debugging
-node examples/liveurl/node/puppeteer-liveurl.mjs   # Puppeteer version
-node examples/liveurl/node/playwright-liveurl.mjs  # Playwright version
+# DevTools - Remote Debugging
+node examples/devtools/node/puppeteer-devtools.mjs   # Puppeteer version
+node examples/devtools/node/playwright-devtools.mjs  # Playwright version
 
 # CLI Configuration - Custom Fingerprint Settings
 node examples/cli/node/custom-config.mjs
