@@ -1,4 +1,4 @@
-<h1 align="center">☁️ BotCloud</h1>
+<h1 align="center"><img src="assets/cloud-icon.svg" width="32" height="32" alt="BotCloud"> BotCloud</h1>
 
 <h4 align="center">Hosted Privacy Browser Gateway for teams validating fingerprint defenses</h4>
 
