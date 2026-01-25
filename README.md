@@ -111,6 +111,7 @@ const params = new URLSearchParams({
 |---------|-----------|-------------|---------|
 | **Super Stealth Mode** | `super_stealth=true` | Maximum anti-detection capability | +0.40x |
 | **DevTools** | See [DevTools docs](docs/devtools.md) | Remote browser debugging via Chrome DevTools | +0.35x |
+| **Multi-Context** | CDP: `Target.createBrowserContext` | Up to 10 independent contexts per session, each with isolated fingerprint | 1.5x (ENT3 required) |
 
 BotCloud supports 50+ CLI parameters for timezone, locale, fingerprint variation, and more.
 
@@ -133,6 +134,37 @@ await new Promise(resolve => cdp.on("devtoolsComplete", resolve));
 ```
 
 **📖 [View full DevTools documentation →](docs/devtools.md)**
+
+---
+
+## Multi-Context - Independent Fingerprints <sup>ENT3</sup>
+
+Multi-Context enables up to 10 independent browser contexts within a single session, each with its own fingerprint configuration. Ideal for multi-account management and parallel identity isolation.
+
+```javascript
+// Create context with independent fingerprint
+const { browserContextId } = await cdp.send('Target.createBrowserContext', {
+  botCloudFlags: [
+    '--new-profile=mac',           // Fresh fingerprint (mac/win/android)
+    '--bot-config-timezone=Asia/Tokyo',
+    '--proxy-ip=103.x.x.x'
+  ]
+});
+
+// Create target in the new context
+const { targetId } = await cdp.send('Target.createTarget', {
+  url: 'about:blank',
+  browserContextId
+});
+```
+
+**Key Features:**
+- Up to 10 contexts per session (vs 1 for standard accounts)
+- Each context can have its own timezone, locale, proxy IP
+- Fresh fingerprint via `--new-profile` parameter
+- Context isolation prevents cross-contamination
+
+**📖 [View full Multi-Context documentation →](docs/cli-parameters.md#multi-context-ent3)**
 
 ---
 

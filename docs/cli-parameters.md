@@ -106,6 +106,7 @@ BotCloud supports tiered feature access based on your account subscription.
 - All ENT2 features, plus:
 - SOCKS5 UDP/QUIC tunneling
 - Mirror distributed sync (`--bot-mirror-*`)
+- **Multi-Context** - Up to 10 independent contexts per session with per-context fingerprint
 
 ---
 
@@ -313,6 +314,77 @@ When set to `auto`, BotCloud derives values from your proxy IP:
 | Feature | Description |
 |---------|-------------|
 | Extension sync | Sync extensions with Chrome stable versions |
+
+---
+
+## Multi-Context <sup>ENT3</sup>
+
+> **Requires:** ENT3 tier with Multi-Context addon (billing: 1.5x)
+
+Multi-Context enables up to 10 independent browser contexts within a single session. Each context can have its own fingerprint configuration, timezone, locale, and proxy settings.
+
+### Creating Contexts with Custom Fingerprints
+
+Use `Target.createBrowserContext` CDP command with `botCloudFlags` parameter:
+
+```javascript
+const cdp = await page.createCDPSession();
+
+// Create context with custom fingerprint
+const { browserContextId } = await cdp.send('Target.createBrowserContext', {
+  botCloudFlags: [
+    '--new-profile=mac',                    // Fresh fingerprint (mac/win/android)
+    '--bot-config-timezone=Asia/Tokyo',     // Override timezone
+    '--bot-config-locale=ja-JP',            // Override locale
+    '--proxy-ip=103.x.x.x'                  // Skip IP detection
+  ]
+});
+
+// Create page in the new context
+const { targetId } = await cdp.send('Target.createTarget', {
+  url: 'about:blank',
+  browserContextId
+});
+```
+
+### Supported botCloudFlags
+
+| Flag | Description | Example |
+|------|-------------|---------|
+| `--new-profile` | Request fresh fingerprint profile | `--new-profile=mac` (mac/win/android) |
+| `--bot-config-*` | Override fingerprint settings | `--bot-config-timezone=Europe/London` |
+| `--proxy-ip` | Specify context proxy IP | `--proxy-ip=203.0.113.50` |
+
+**Notes:**
+- `botCloudFlags` is converted to `botbrowserFlags` internally
+- Gateway validates and sanitizes all flags for security
+- Flags that require filesystem access are not supported in cloud
+
+### Modifying Existing Context Flags
+
+Use `BotBrowser.setBrowserContextFlags` to update flags on an existing context:
+
+```javascript
+await cdp.send('BotBrowser.setBrowserContextFlags', {
+  browserContextId: contextId,
+  botCloudFlags: [
+    '--bot-config-timezone=America/New_York'
+  ]
+});
+```
+
+### Limits
+
+| Account Type | Max Contexts |
+|--------------|--------------|
+| Standard | 1 (default context only) |
+| ENT3 + Multi-Context | 10 |
+
+### Use Cases
+
+- **Multi-account management**: Each account in a separate context with unique fingerprint
+- **A/B testing**: Compare different fingerprint configurations
+- **Geo-distributed workflows**: Different contexts for different regions
 
 ---
 

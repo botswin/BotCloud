@@ -39,6 +39,7 @@ curl -H "Authorization: Bearer your-token" https://cloud.bots.win/api/quota
     "breakdown": {
       "sessionMultiplier": 1.3,
       "cloakTierPremium": 0.5,
+      "contextMultiplier": 1.0,
       "userDataPremium": 0.1,
       "devtoolsPremium": 0.35,
       "superStealthPremium": 0.40
@@ -60,6 +61,7 @@ curl -H "Authorization: Bearer your-token" https://cloud.bots.win/api/quota
 | `pricing.breakdown` | Detailed multiplier components |
 | `pricing.breakdown.sessionMultiplier` | Multiplier based on concurrent session count |
 | `pricing.breakdown.cloakTierPremium` | Premium for Cloak Tier (basic/pro/ent1/ent2/ent3) |
+| `pricing.breakdown.contextMultiplier` | Multiplier for Multi-Context feature (1.0 = disabled, 1.5 = enabled) |
 | `pricing.breakdown.userDataPremium` | Premium for User Data quota |
 | `pricing.breakdown.devtoolsPremium` | Premium for DevTools access (+0.35) |
 | `pricing.breakdown.superStealthPremium` | Premium for Super Stealth Mode (+0.40) |
@@ -288,11 +290,12 @@ BotCloud uses dynamic usage-based billing. Your rate is calculated based on actu
 ### Billing Formula
 
 ```
-Total Multiplier = Session Multiplier + Cloak Tier Premium + User Data Premium + DevTools Premium + Super Stealth Premium
+Total Multiplier = Session Multiplier × Context Multiplier + Cloak Tier Premium + User Data Premium + DevTools Premium + Super Stealth Premium
 Effective Rate = Base Rate × Total Multiplier
 ```
 
 - **Base rate**: 1 quota per minute
+- **Context Multiplier**: 1.0x (standard) or 1.5x (Multi-Context enabled, ENT3 required)
 
 ### Session Multiplier
 
@@ -319,7 +322,7 @@ Based on concurrent session count:
 | pro | +1.0 | + Random history injection (`--bot-inject-random-history`), always-active windows (`--bot-always-active`), Android profile support |
 | ent1 | +2.0 | + Cookie management (`--bot-cookies`), proxy IP specification (`--proxy-ip`), local DNS (`--bot-local-dns`), **per-context proxy**, custom geo override, console message suppression (`--bot-disable-console-message`), WebRTC ICE control (`--bot-webrtc-ice`) |
 | ent2 | +3.0 | + Browser brand spoofing (`--bot-config-browser-brand`), deterministic noise seed (`--bot-noise-seed`), time scaling (`--bot-time-scale`), **precision FPS simulation**, **Widevine CDM**, **DRM simulation**, **extension sync** |
-| ent3 | +4.0 | + SOCKS5 UDP/QUIC tunneling, Mirror distributed sync (`--bot-mirror-*`) |
+| ent3 | +4.0 | + SOCKS5 UDP/QUIC tunneling, Mirror distributed sync (`--bot-mirror-*`), **Multi-Context** (up to 10 contexts with per-context fingerprint) |
 
 ### Feature Premiums
 
@@ -327,6 +330,7 @@ Based on concurrent session count:
 |---------|---------|-------------|
 | DevTools | +0.35 | Remote browser debugging via Chrome DevTools |
 | Super Stealth | +0.40 | Maximum anti-detection capability |
+| Multi-Context | 1.5x | Up to 10 independent contexts per session (ENT3 required) |
 
 **📖 [View detailed pricing →](https://bots.win/en/pricing/)**
 
